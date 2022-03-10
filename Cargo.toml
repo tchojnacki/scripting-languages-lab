@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+  "lab1/paths",
+  "lab1/show-all",
+  "lab1/show-similar",
+]
