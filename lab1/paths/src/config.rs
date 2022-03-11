@@ -1,4 +1,5 @@
-enum FileSorting {
+#[derive(PartialEq)]
+pub enum FileSorting {
     NoSorting,
     Alphabetically,
     ByDate,
@@ -11,10 +12,10 @@ pub enum ArgumentParsingError<'a> {
 }
 
 pub struct Config {
-    recursively: bool,
-    directories_only: bool,
-    display_size: bool,
-    sorting: FileSorting,
+    pub recursively: bool,
+    pub directories_only: bool,
+    pub display_size: bool,
+    pub sorting: FileSorting,
 }
 
 impl Default for Config {
