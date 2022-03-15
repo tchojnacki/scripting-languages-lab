@@ -1,6 +1,5 @@
-use std::{env, process};
-
 use paths::{traverse, Config};
+use std::{env, process};
 
 fn main() {
     let args = env::args().skip(1).collect::<Vec<_>>();
