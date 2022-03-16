@@ -1,4 +1,3 @@
-use filesize::PathExt;
 use std::{env, error::Error, fs, path::Path, time::SystemTime};
 
 use crate::{config::FileSorting, Config};
@@ -30,7 +29,7 @@ fn recurse_directory(path: &Path, config: &Config, depth: usize) -> Result<(), B
             print!("{padding}{file_name}");
 
             if config.display_size && !path.is_dir() {
-                let file_size = path.size_on_disk()?;
+                let file_size = fs::metadata(&path)?.len();
                 println!("\t\t{file_size}");
             } else {
                 println!();
