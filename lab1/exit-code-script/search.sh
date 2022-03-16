@@ -13,7 +13,7 @@ keywords="$@"
 
 # Validate if input file exists
 if test ! -f "$filename"; then
-    echo "Input file does not exist!"
+    echo "Input file $filename does not exist!"
     exit 1
 fi
 
