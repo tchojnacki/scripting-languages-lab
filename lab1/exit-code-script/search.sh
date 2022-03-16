@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 # Validate script argument count
-if test "$#" -eq 0; then
+if [ "$#" -eq 0 ]; then
     echo "No arguments given! At least 1 required - the file name."
     exit 1
 fi
@@ -12,7 +12,7 @@ shift
 keywords="$@"
 
 # Validate if input file exists
-if test ! -f "$filename"; then
+if [ ! -f "$filename" ]; then
     echo "Input file $filename does not exist!"
     exit 1
 fi
@@ -25,7 +25,7 @@ kodpowrotu $keywords < "$filename"
 exit_code="$?"
 
 # Display output to user
-if test "$exit_code" -gt 0; then
+if [ "$exit_code" -gt 0 ]; then
     echo "Found! Most common word: ${!exit_code}, passed as argument $exit_code."
 else
     echo "No keyword was found in the text!"
