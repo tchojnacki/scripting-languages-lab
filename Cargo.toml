@@ -5,4 +5,5 @@ members = [
   "lab1/show-all",
   "lab1/show-similar",
   "lab1/exit-code",
+  "lab2/head-tail",
 ]
