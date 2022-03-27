@@ -7,9 +7,10 @@ pub struct RingBuffer<T> {
 
 impl<T> RingBuffer<T> {
     fn push(&mut self, value: T) {
-        if self.size <= self.data.len() {
+        if self.data.len() >= self.size {
             self.data.pop_front();
         }
+
         self.data.push_back(value);
     }
 
@@ -18,6 +19,8 @@ impl<T> RingBuffer<T> {
             data: VecDeque::new(),
             size,
         };
+
+        ring_buffer.data.reserve(size);
 
         for value in iter {
             ring_buffer.push(value);
