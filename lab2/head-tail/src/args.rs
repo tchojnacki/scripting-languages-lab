@@ -6,7 +6,7 @@ pub trait CommonArgs {
 }
 
 #[derive(Parser)]
-#[clap(name = "myhead")]
+#[clap(name = "myhead", mut_arg("help", |h| h.hide(true)))]
 /// Alternative to head(1) from Linux
 pub struct HeadArgs {
     /// Print the first n lines
@@ -29,7 +29,7 @@ impl CommonArgs for HeadArgs {
 }
 
 #[derive(Parser)]
-#[clap(name = "mytail")]
+#[clap(name = "mytail", mut_arg("help", |h| h.hide(true)))]
 /// Alternative to tail(1) from Linux
 pub struct TailArgs {
     /// Print the last n lines
