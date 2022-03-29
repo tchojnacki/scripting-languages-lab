@@ -10,3 +10,4 @@ cargo install --path lab2/head-tail
 cp lab1/exit-code-search.sh ~/bin/exit-code-search
 cp lab2/longest-source-files.sh ~/bin/longest-source-files
 cp lab2/average-file-size.sh ~/bin/average-file-size
+cp lab2/mysave.sh ~/bin/mysave
