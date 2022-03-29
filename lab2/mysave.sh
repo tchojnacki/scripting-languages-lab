@@ -37,4 +37,4 @@ if [[ -d "$dst" ]]; then
     usage
 fi
 
-rsync -r "$src" "$dst"
+rsync -r "$src/" "$dst"
