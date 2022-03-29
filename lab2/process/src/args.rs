@@ -2,7 +2,7 @@ use clap::{AppSettings, Parser};
 
 const INVALID_USAGE_ERROR_CODE: i32 = 64;
 
-#[derive(Parser, Debug)]
+#[derive(Parser)]
 #[clap(setting = AppSettings::DeriveDisplayOrder, mut_arg("help", |h| h.hide(true)))]
 /// Parses stdin line by line using rules set by command arguments
 pub struct ProcessArgs {

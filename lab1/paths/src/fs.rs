@@ -2,8 +2,6 @@ use std::{env, error::Error, fs, path::Path, time::SystemTime};
 
 use crate::{config::FileSorting, Config};
 
-const DEPTH_PADDING_MULTIPLIER: usize = 4;
-
 pub fn traverse(config: Config) -> Result<(), Box<dyn Error>> {
     recurse_directory(&env::current_dir()?, &config, 0)
 }
@@ -15,22 +13,22 @@ fn recurse_directory(path: &Path, config: &Config, depth: usize) -> Result<(), B
         .collect::<Vec<_>>();
 
     match config.sorting {
-        FileSorting::Alphabetically => subpaths.sort_by_key(|p| get_file_name(p).to_owned()),
-        FileSorting::ByDate => subpaths.sort_by_key(|p| get_modification_time(p).to_owned()),
-        FileSorting::NoSorting => (),
+        Some(FileSorting::Alpha) => subpaths.sort_by_key(|p| get_file_name(p).to_owned()),
+        Some(FileSorting::Date) => subpaths.sort_by_key(|p| get_modification_time(p).to_owned()),
+        None => (),
     };
 
     for path in subpaths {
         let file_name = get_file_name(&path);
 
         if !config.directories_only || path.is_dir() {
-            let padding = " ".repeat(DEPTH_PADDING_MULTIPLIER * depth);
+            let padding = config.indent.repeat(depth);
 
             print!("{padding}{file_name}");
 
-            if config.display_size && !path.is_dir() {
+            if config.size_displayed && !path.is_dir() {
                 let file_size = fs::metadata(&path)?.len();
-                println!("\t\t{file_size}");
+                println!("\t{file_size}");
             } else {
                 println!();
             }

@@ -1,61 +1,38 @@
-#[derive(PartialEq)]
+use clap::{AppSettings, ArgEnum, Parser};
+
+#[derive(PartialEq, Clone, ArgEnum)]
+#[clap(rename_all = lower)]
 pub enum FileSorting {
-    NoSorting,
-    Alphabetically,
-    ByDate,
+    Alpha,
+    Date,
 }
 
-pub enum ArgumentParsingError<'a> {
-    UnknownArgument(&'a str),
-    NoSortingType,
-    BadSortingType(&'a str),
-}
-
+#[derive(Parser)]
+#[clap(setting = AppSettings::DeriveDisplayOrder, mut_arg("help", |h| h.hide(true)))]
+/// Display paths from current directory line by line
 pub struct Config {
+    #[clap(short = 'R')]
+    /// Recursively display nested paths
     pub recursively: bool,
+
+    #[clap(short = 'd')]
+    /// Display only directories
     pub directories_only: bool,
-    pub display_size: bool,
-    pub sorting: FileSorting,
-}
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            recursively: false,
-            directories_only: false,
-            display_size: false,
-            sorting: FileSorting::NoSorting,
-        }
-    }
-}
+    #[clap(short = 's')]
+    /// Display file size in bytes after its name
+    pub size_displayed: bool,
 
-impl Config {
-    pub fn from_args(args: &[String]) -> Result<Self, ArgumentParsingError> {
-        let mut iter = args.iter();
-        let mut config = Config::default();
+    #[clap(long = "sort", arg_enum)]
+    /// Sort files within directory
+    pub sorting: Option<FileSorting>,
 
-        while let Some(arg) = iter.next() {
-            use ArgumentParsingError::*;
-            use FileSorting::*;
-
-            match arg.as_str() {
-                "-R" => config.recursively = true,
-                "-d" => config.directories_only = true,
-                "-s" => config.display_size = true,
-                "--sort" => {
-                    config.sorting = match iter.next() {
-                        Some(sorting_type) => match sorting_type.as_str() {
-                            "alpha" => Alphabetically,
-                            "date" => ByDate,
-                            _ => return Err(BadSortingType(sorting_type)),
-                        },
-                        None => return Err(NoSortingType),
-                    }
-                }
-                _ => return Err(UnknownArgument(arg)),
-            }
-        }
-
-        Ok(config)
-    }
+    #[clap(
+        long = "indent",
+        requires = "recursively",
+        default_value = "  ",
+        hide = true
+    )]
+    /// Change symbol indicating directory nesting
+    pub indent: String,
 }

@@ -182,6 +182,9 @@ dependencies = [
 [[package]]
 name = "paths"
 version = "0.1.0"
+dependencies = [
+ "clap",
+]
 
 [[package]]
 name = "predicates"
