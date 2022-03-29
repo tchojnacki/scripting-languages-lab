@@ -1,4 +1,5 @@
 #!/bin/env bash
+set -euo pipefail
 
 cargo install --path lab1/exit-code
 cargo install --path lab1/paths
