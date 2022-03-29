@@ -27,3 +27,5 @@ paths -Rs --indent="" |
     process --select=.rs --delimiter=$'\t' --separator=" " |
     sort -nrk2 |
     myhead --lines="$2"
+
+# POC: paths -Rs --indent="" | process --select=.rs --delimiter=$'\t' --separator=" " | sort -nrk2 | myhead --lines=5
