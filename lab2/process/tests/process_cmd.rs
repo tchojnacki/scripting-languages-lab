@@ -22,8 +22,8 @@ fn empty_stdout() {
 #[test]
 fn simple_csv() {
     cmd()
-        .args(["--delimiter=;", "--project=1", "--select=07"])
-        .pipe_stdin("tests/resources/simple.in.csv")
+        .args(["--delimiter=,", "--project=1", "--select=07"])
+        .pipe_stdin("tests/resources/simple.csv")
         .unwrap()
         .assert()
         .success()
