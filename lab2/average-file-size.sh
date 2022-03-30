@@ -24,6 +24,10 @@ do
 done
 
 # Print average
-echo "$((sum / count))"
+if [[ "$count" -ne 0 ]]; then
+    echo "$((sum / count))"
+else
+    echo "No files with given extension: .$1 found!"
+fi
 
 # POC: paths -Rs --indent="" | grep ".toml" | process --delimiter=$'\t' --project=1 | awk '{s+=$1}END{print s/NR}'
