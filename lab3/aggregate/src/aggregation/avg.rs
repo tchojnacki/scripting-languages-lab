@@ -13,9 +13,13 @@ impl Aggregation for AvgAggr {
     }
 
     fn result(&self) -> Option<f64> {
-        match (self.sum.result(), self.count.result()) {
-            (Some(sum), Some(count)) => Some(sum / count),
-            _ => None,
+        let sum = self.sum.result()?;
+        let count = self.count.result()?;
+
+        if count != 0. {
+            Some(sum / count)
+        } else {
+            None
         }
     }
 }

@@ -8,7 +8,7 @@ pub struct AggregateArgs {
         short,
         long = "aggr",
         require_equals = true,
-        possible_values = ["min", "max", "sum", "avg", "count"],
+        possible_values = ["min", "max", "sum", "avg", "count", "first", "last", "product", "range"],
     )]
     /// The aggregation function
     pub aggregation: String,

@@ -13,9 +13,6 @@ impl Aggregation for RangeAggr {
     }
 
     fn result(&self) -> Option<f64> {
-        match (self.min.result(), self.max.result()) {
-            (Some(min), Some(max)) => Some(max - min),
-            _ => None,
-        }
+        Some(self.max.result()? - self.min.result()?)
     }
 }
