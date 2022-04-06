@@ -1,9 +1,10 @@
+mod max;
 mod min;
 mod sum;
 
 pub trait Aggregation {
     fn consume(&mut self, element: f64);
-    fn results(&self) -> Option<f64>;
+    fn result(&self) -> Option<f64>;
 }
 
 impl dyn Aggregation {

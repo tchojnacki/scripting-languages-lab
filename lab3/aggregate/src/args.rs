@@ -31,7 +31,7 @@ pub struct AggregateArgs {
         conflicts_with = "column-label"
     )]
     /// Comma separated input column indices to group by before aggregation
-    pub group_index: Vec<usize>,
+    pub group_indices: Vec<usize>,
 
     #[clap(short = 's', long, require_equals = true, default_value = "\t")]
     /// String used to separate input columns
@@ -49,5 +49,5 @@ pub struct AggregateArgs {
         requires = "column-label"
     )]
     /// Comma separated input column labels to group by before aggregation
-    pub group_label: Vec<String>,
+    pub group_labels: Vec<String>,
 }

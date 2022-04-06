@@ -10,7 +10,7 @@ impl Aggregation for SumAggr {
         self.sum += element;
     }
 
-    fn results(&self) -> Option<f64> {
+    fn result(&self) -> Option<f64> {
         Some(self.sum)
     }
 }
