@@ -1,7 +1,7 @@
 use clap::{AppSettings, Parser};
 
 #[derive(Parser)]
-#[clap(setting = AppSettings::DeriveDisplayOrder, after_help = "If --column-label is used, first input row is ignored from aggregation")]
+#[clap(setting = AppSettings::DeriveDisplayOrder, after_help = "If --column-label is used, first input row is ignored from aggregation.\nGrouping doesn't sort the data - do it yourself.")]
 /// Run a given aggregation function on input from stdin and print result to stdout
 pub struct AggregateArgs {
     #[clap(

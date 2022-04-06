@@ -1,14 +1,17 @@
-use crate::{aggregation::Aggregation, args::AggregateArgs};
-use std::io::{self, BufRead};
+use crate::{aggregation::Aggregation, args::AggregateArgs, util};
+use std::{
+    io::{self, BufRead},
+    mem,
+};
 
-pub fn parse_data_labels(args: &mut AggregateArgs) -> Result<(), &str> {
-    if let Some(column_label) = &args.column_label {
-        let group_labels = &args.group_label;
+pub fn parse_data_header(args: &mut AggregateArgs) -> Result<(), &str> {
+    if let Some(column_label) = mem::take(&mut args.column_label) {
+        let group_labels = mem::take(&mut args.group_label);
 
         if let Some(labels) = io::stdin().lock().lines().flatten().next() {
             let labels = labels.split(&args.separator).collect::<Vec<_>>();
 
-            let column_index = labels.iter().position(|l| l == column_label);
+            let column_index = labels.iter().position(|l| l == &column_label);
             let group_indices = group_labels
                 .iter()
                 .map(|group| labels.iter().position(|l| l == group))
@@ -19,10 +22,7 @@ pub fn parse_data_labels(args: &mut AggregateArgs) -> Result<(), &str> {
             }
 
             args.column_index = column_index.unwrap();
-            args.column_label = None;
-
             args.group_index = group_indices.unwrap();
-            args.group_label = Vec::new();
         } else {
             return Err("No line containing labels found!");
         }
@@ -34,22 +34,34 @@ pub fn parse_data_labels(args: &mut AggregateArgs) -> Result<(), &str> {
 pub fn process(args: &AggregateArgs) {
     let mut aggregation = <dyn Aggregation>::from_string(&args.aggregation);
 
-    for line in io::stdin().lock().lines().flatten() {
-        let parts = line.split(&args.separator).collect::<Vec<_>>();
+    let mut prev_groups: Option<Vec<String>> = None;
 
-        if let Some(element) = parts
-            .get(args.column_index)
+    for line in io::stdin().lock().lines().flatten() {
+        if let Some(element) = line
+            .split(&args.separator)
+            .nth(args.column_index)
             .and_then(|string| string.replace(',', ".").parse::<f64>().ok())
         {
+            let cur_groups =
+                util::extract_group_contents(&line, &args.separator, &args.group_index);
+
+            if let Some(prev_groups) = prev_groups {
+                if prev_groups != cur_groups {
+                    util::print_result(aggregation.results(), &prev_groups, &args.separator);
+
+                    aggregation = <dyn Aggregation>::from_string(&args.aggregation);
+                }
+            }
+
             aggregation.consume(element);
+
+            prev_groups = Some(cur_groups);
         }
     }
 
-    println!(
-        "{}",
-        aggregation
-            .results()
-            .map(|r| r.to_string())
-            .unwrap_or_default()
-    );
+    util::print_result(
+        aggregation.results(),
+        &prev_groups.unwrap_or_default(),
+        &args.separator,
+    )
 }
