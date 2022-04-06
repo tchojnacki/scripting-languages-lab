@@ -2,17 +2,17 @@ use super::Aggregation;
 
 #[derive(Default)]
 pub struct MinAggr {
-    current: Option<f64>,
+    min: Option<f64>,
 }
 
 impl Aggregation for MinAggr {
     fn consume(&mut self, element: f64) {
-        if self.current.is_none() || &element < self.current.as_ref().unwrap() {
-            self.current = Some(element);
+        if self.min.is_none() || &element < self.min.as_ref().unwrap() {
+            self.min = Some(element);
         }
     }
 
     fn result(&self) -> Option<f64> {
-        self.current
+        self.min
     }
 }
