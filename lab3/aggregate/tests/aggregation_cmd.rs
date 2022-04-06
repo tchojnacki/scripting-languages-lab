@@ -6,7 +6,7 @@ fn cmd() -> Command {
 
 #[test]
 fn help() {
-    cmd().arg("--help").assert().code(0);
+    cmd().arg("--help").assert().success();
 }
 
 #[test]
@@ -16,7 +16,7 @@ fn no_args() {
 
 #[test]
 fn empty_stdin() {
-    cmd().arg("-a=min").assert().code(0).stdout("\n");
+    cmd().arg("-a=min").assert().success().stdout("\n");
 }
 
 #[test]
@@ -38,7 +38,22 @@ fn aggregators() {
             .pipe_stdin("tests/resources/numbers.txt")
             .unwrap()
             .assert()
-            .code(0)
+            .success()
             .stdout(format!("{}\n", result));
+    }
+}
+
+#[test]
+fn custom_column() {
+    let column_sums = [38, 50, 32, 0];
+
+    for (index, sum) in column_sums.iter().enumerate() {
+        cmd()
+            .args(&["--aggr=sum", &format!("--column-index={}", index)])
+            .pipe_stdin("tests/resources/multi-column.tsv")
+            .unwrap()
+            .assert()
+            .success()
+            .stdout(format!("{}\n", sum));
     }
 }
