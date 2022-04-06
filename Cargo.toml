@@ -7,4 +7,5 @@ members = [
   "lab1/exit-code",
   "lab2/process",
   "lab2/head-tail",
+  "lab3/aggregate",
 ]
