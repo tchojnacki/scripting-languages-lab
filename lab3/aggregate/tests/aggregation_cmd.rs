@@ -22,7 +22,7 @@ fn empty_stdin() {
 #[test]
 fn aggregators() {
     let results = [
-        ("avg", "55.76470588235294"),
+        ("avg", "55.764"),
         ("count", "51"),
         ("first", "50"),
         ("last", "99"),

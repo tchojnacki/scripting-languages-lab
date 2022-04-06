@@ -21,15 +21,16 @@ fn split_project_join(
     new_separator: &str,
     filter: &Option<Vec<usize>>,
 ) -> String {
-    let split_line = line.split(old_separator);
+    let split_line = line.split(old_separator).collect::<Vec<_>>();
 
     let line_segments = if let Some(columns) = filter {
-        split_line
-            .enumerate()
-            .filter_map(|(i, v)| if columns.contains(&i) { Some(v) } else { None })
+        columns
+            .iter()
+            .filter_map(|&i| split_line.get(i))
+            .copied()
             .collect::<Vec<_>>()
     } else {
-        split_line.collect::<Vec<_>>()
+        split_line
     };
 
     line_segments.join(new_separator)

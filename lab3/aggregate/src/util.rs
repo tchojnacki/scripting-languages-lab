@@ -13,7 +13,11 @@ pub fn extract_group_contents(line: &str, separator: &str, group_indices: &[usiz
 
 pub fn print_result(result: Option<f64>, group_labels: &[String], separator: &str) {
     let mut group_labels = group_labels.to_vec();
-    group_labels.push(result.map(|r| r.to_string()).unwrap_or_default());
+    group_labels.push(
+        result
+            .map(|r| (f64::trunc(r * 1000.) / 1000.).to_string())
+            .unwrap_or_default(),
+    );
 
     println!("{}", group_labels.join(separator));
 }
