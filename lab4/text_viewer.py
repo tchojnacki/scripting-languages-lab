@@ -1,4 +1,5 @@
 import subprocess
+from inspect import cleandoc
 from re import findall
 from file_viewer import FileViewer
 from text_buffer import TextBuffer
@@ -19,6 +20,13 @@ class TextStats:
         self.number_of_lines = len(text.splitlines())
         self.number_of_words = len(text.split())
         self.number_of_nonalpha = len(findall(r'[^\w]', text))
+
+    def __repr__(self):
+        return cleandoc(f'''
+        number_of_lines: {self.number_of_lines}
+        number_of_words: {self.number_of_words}
+        number_of_nonalpha: {self.number_of_nonalpha}
+        ''')
 
 
 class TextViewer(FileViewer, TextBuffer):

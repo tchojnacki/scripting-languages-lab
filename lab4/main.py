@@ -1,5 +1,6 @@
 from viewer_creator import ViewerCreator
 from multiple_accumulate import MultipleAccumulate
+from runtime import Runtime
 
 
 def test_task1():
@@ -36,6 +37,7 @@ def test_task2():
 def main():
     test_task1()
     test_task2()
+    Runtime.test_duck_typing()
 
 
 if __name__ == '__main__':
