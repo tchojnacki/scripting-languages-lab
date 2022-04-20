@@ -29,18 +29,17 @@ class TextStats:
         ''')
 
 
-class TextViewer(FileViewer, TextBuffer):
+class TextViewer(TextBuffer, FileViewer):
     def __init__(self, path: str):
-        FileViewer.__init__(self, path)
-
-        TextBuffer.__init__(self)
-        self.read_from_file(path)
-
         self._stats = TextStats()
-        self._stats.compute(self.text)
+        super().__init__(path)
 
     def view(self):
         subprocess.run(['notepad.exe', self.path], check=True)
 
     def get_data(self):
         return self._stats
+
+    def read_from_file(self, path: str):
+        super().read_from_file(path)
+        self._stats.compute(self.text)

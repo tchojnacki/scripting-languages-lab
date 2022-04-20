@@ -4,6 +4,8 @@ from runtime import Runtime
 
 
 def test_task1():
+    print('TASK 1')
+
     creator = ViewerCreator()
 
     image_viewer = creator.create_viewer(r'test_files\samoyed.jpg')
@@ -19,6 +21,8 @@ def test_task1():
 
 
 def test_task2():
+    print('TASK 2')
+
     def my_sum(first, second):
         return first + second
 

@@ -19,4 +19,5 @@ class Runtime:
 
     @staticmethod
     def print_viewer_stats(text_viewer):
+        print('=== STATS ===')
         print(text_viewer.get_data())
