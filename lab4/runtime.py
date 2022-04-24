@@ -6,7 +6,7 @@ class Runtime:
     @staticmethod
     def test_duck_typing():
         creator = ViewerCreator()
-        viewer = creator.create_viewer(r'test_files\tadeusz.txt')
+        viewer = creator.create_viewer('test_files/tadeusz.txt')
 
         acc = MultipleAccumulate(
             [1, 2, 3],

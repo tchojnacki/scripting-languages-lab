@@ -8,10 +8,10 @@ def test_task1():
 
     creator = ViewerCreator()
 
-    image_viewer = creator.create_viewer(r'test_files\samoyed.jpg')
+    image_viewer = creator.create_viewer('test_files\\samoyed.jpg')
     image_viewer.view()
 
-    text_viewer = creator.create_viewer(r'test_files\tadeusz.txt')
+    text_viewer = creator.create_viewer('test_files/tadeusz.txt')
     text_viewer.view()
 
     stats = text_viewer.get_data()
