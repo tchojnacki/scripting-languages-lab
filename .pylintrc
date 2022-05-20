@@ -2,4 +2,4 @@
 disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,not-callable
 
 [TYPECHECK]
-extension-pkg-allow-list=graph_lib
+extension-pkg-allow-list=graphlibpy
