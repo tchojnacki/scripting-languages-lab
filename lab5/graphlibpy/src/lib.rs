@@ -1,13 +1,21 @@
+use graphlib::Graph;
 use pyo3::prelude::*;
+
+/// A class representing a graph.
+#[pyclass(name = "Graph")]
+struct PyGraph(Graph);
+
+#[pymethods]
+impl PyGraph {
+    #[new]
+    fn new() -> Self {
+        PyGraph(Graph::new())
+    }
+}
 
 /// A Python module implemented in Rust.
 #[pymodule]
 fn graphlibpy(_py: Python, m: &PyModule) -> PyResult<()> {
-    /// Formats the sum of two numbers as string.
-    #[pyfn(m)]
-    fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
-        Ok((a + b).to_string())
-    }
-
+    m.add_class::<PyGraph>()?;
     Ok(())
 }

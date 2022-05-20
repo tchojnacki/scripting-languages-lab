@@ -8,4 +8,6 @@ members = [
   "lab2/process",
   "lab2/head-tail",
   "lab3/aggregate",
+  "lab5/graphlib",
+  "lab5/graphlibpy"
 ]

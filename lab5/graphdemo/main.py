@@ -1,3 +1,3 @@
-import graphlibpy
+from graphlibpy import Graph
 
-print(graphlibpy.sum_as_string(3, 5))
+g = Graph()
