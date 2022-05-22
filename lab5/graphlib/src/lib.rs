@@ -1,7 +1,8 @@
-pub struct Graph {}
+mod edge;
+mod graph;
+mod node;
+mod repr;
 
-impl Graph {
-    pub fn new() -> Self {
-        Graph {}
-    }
-}
+pub use edge::Edge;
+pub use graph::Graph;
+pub use node::Node;

@@ -1,7 +1,6 @@
 # Building the library
 ```bash
-python -m venv .env
-source .env/bin/activate
 pip install maturin
+maturin develop # development build
 maturin build # outputs to target/wheels/graphlibpy
 ```
