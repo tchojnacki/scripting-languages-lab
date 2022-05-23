@@ -1,5 +1,4 @@
-use super::GraphRepr;
-use crate::{Edge, Node};
+use crate::{Edge, Graph, Node};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -8,20 +7,26 @@ pub struct AdjacencyList {
     nodes: Vec<(Node, Vec<(usize, Edge)>)>,
 }
 
-impl GraphRepr for AdjacencyList {
-    fn add_node(&mut self, node: Node) {
+impl Graph for AdjacencyList {
+    fn add_node(&mut self, node: Node) -> Option<&Node> {
         if !self.index_lookup.contains_key(node.label()) {
-            self.index_lookup
-                .insert(node.label().to_owned(), self.nodes.len());
+            let node_idx = self.nodes.len();
+            self.index_lookup.insert(node.label().to_owned(), node_idx);
             self.nodes.push((node, vec![]));
+            Some(&self.nodes[node_idx].0)
+        } else {
+            None
         }
     }
 
-    fn add_edge(&mut self, from: &str, to: &str, edge: Edge) {
+    fn add_edge(&mut self, from: &str, to: &str, edge: Edge) -> Option<&Edge> {
         if self.index_lookup.contains_key(from) && self.index_lookup.contains_key(to) {
-            self.nodes[self.index_lookup[from]]
-                .1
-                .push((self.index_lookup[to], edge));
+            let neighbours = &mut self.nodes[self.index_lookup[from]].1;
+            let neighbour_idx = neighbours.len();
+            neighbours.push((self.index_lookup[to], edge));
+            Some(&neighbours[neighbour_idx].1)
+        } else {
+            None
         }
     }
 
@@ -41,7 +46,7 @@ impl GraphRepr for AdjacencyList {
 #[cfg(test)]
 mod tests {
     use super::AdjacencyList;
-    use crate::{repr::GraphRepr, Edge, Node};
+    use crate::{Edge, Graph, Node};
 
     #[test]
     fn it_adds_node() {
