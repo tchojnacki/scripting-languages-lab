@@ -8,6 +8,12 @@ impl Node {
         Self { label }
     }
 
+    pub fn from(label: &str) -> Self {
+        Self {
+            label: label.to_string(),
+        }
+    }
+
     pub fn label(&self) -> &str {
         &self.label
     }

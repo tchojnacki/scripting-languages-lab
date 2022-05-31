@@ -1,19 +1,15 @@
-from graphlibpy import Graph, Node
+from graphlibpy import Graph
 
 g = Graph()
-g.create_node("a")
-n = g.add_node(Node("b"))
-none = g.create_node("a")
-print(none)
-print(n.label)
-g.create_edge("a", "b", 1.5)
-
-for n in g.node_list:
-    print(n.label)
-
-for e in g.edge_list:
-    print(e.weight)
-
+n1 = g.add_node("test")
+n2 = g.add_node("test2")
+e = g.add_edge("test", "test2", 5)
+print(n1.label)
+print(e)
+print(g.nodes)
+print(g.edges)
+print(g.neighbours("test"))
+print(g.get_edge("test", "test2"))
 print(g.order)
 print(g.size)
 print(g.is_empty)

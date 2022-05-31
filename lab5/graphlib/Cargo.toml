@@ -2,3 +2,7 @@
 name = "graphlib"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+bimap = "0.6.2"
+delegate = "0.6.2"

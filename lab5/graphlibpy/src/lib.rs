@@ -3,72 +3,49 @@ use pyo3::prelude::*;
 
 /// A class representing a graph.
 #[pyclass(name = "Graph")]
-pub struct PyGraph(Box<dyn Graph + Send>);
+pub struct PyGraph(Graph);
 
 #[pymethods]
 impl PyGraph {
     #[new]
     fn new() -> Self {
-        PyGraph(<dyn Graph>::default())
+        PyGraph(Graph::default())
     }
 
-    pub fn add_node(&mut self, py: Python, node: PyObject) -> PyResult<Option<PyObject>> {
-        let PyNode(node) = node.extract(py)?;
-        Ok(self.0.add_node(node).map(|n| PyNode(n.clone()).into_py(py)))
+    fn add_node(&mut self, label: &str) -> PyResult<PyNode> {
+        Ok(PyNode(self.0.add_node(label)))
     }
 
-    pub fn create_node(&mut self, py: Python, label: &str) -> PyResult<Option<PyObject>> {
-        Ok(self
-            .0
-            .create_node(label)
-            .map(|n| PyNode(n.clone()).into_py(py)))
-    }
-
-    pub fn add_edge(
-        &mut self,
-        py: Python,
-        from: &str,
-        to: &str,
-        edge: PyObject,
-    ) -> PyResult<Option<PyObject>> {
-        let PyEdge(edge) = edge.extract(py)?;
-        Ok(self
-            .0
-            .add_edge(from, to, edge)
-            .map(|e| PyEdge(*e).into_py(py)))
-    }
-
-    pub fn create_edge(
-        &mut self,
-        py: Python,
-        from: &str,
-        to: &str,
-        weight: f64,
-    ) -> PyResult<Option<PyObject>> {
-        Ok(self
-            .0
-            .create_edge(from, to, weight)
-            .map(|e| PyEdge(*e).into_py(py)))
+    fn add_edge(&mut self, from: &str, to: &str, weight: f64) -> PyResult<Option<PyEdge>> {
+        Ok(self.0.add_edge(from, to, weight).map(PyEdge))
     }
 
     #[getter]
-    fn node_list(&self, py: Python) -> PyResult<Vec<PyObject>> {
-        Ok(self
-            .0
-            .node_list()
-            .iter()
-            .map(|&n| PyNode(n.clone()).into_py(py))
-            .collect())
+    fn nodes(&self) -> PyResult<Vec<PyNode>> {
+        Ok(self.0.nodes().iter().map(|n| PyNode(n.clone())).collect())
     }
 
     #[getter]
-    fn edge_list(&self, py: Python) -> PyResult<Vec<PyObject>> {
+    fn edges(&self) -> PyResult<Vec<(&str, &str, PyEdge)>> {
         Ok(self
             .0
-            .edge_list()
+            .edges()
             .iter()
-            .map(|&e| PyEdge(*e).into_py(py))
+            .map(|&(from, to, e)| (from, to, PyEdge(e)))
             .collect())
+    }
+
+    fn neighbours(&self, node: &str) -> PyResult<Vec<PyNode>> {
+        Ok(self
+            .0
+            .neighbours(node)
+            .iter()
+            .map(|n| PyNode(n.clone()))
+            .collect())
+    }
+
+    fn get_edge(&self, from: &str, to: &str) -> PyResult<Option<PyEdge>> {
+        Ok(self.0.get_edge(from, to).map(PyEdge))
     }
 
     #[getter]
@@ -100,8 +77,12 @@ impl PyNode {
     }
 
     #[getter]
-    pub fn label(&self) -> PyResult<&str> {
+    fn label(&self) -> PyResult<&str> {
         Ok(self.0.label())
+    }
+
+    fn __repr__(&self) -> String {
+        format!("Node('{}')", self.0.label())
     }
 }
 
@@ -118,8 +99,12 @@ impl PyEdge {
     }
 
     #[getter]
-    pub fn weight(&self) -> PyResult<f64> {
+    fn weight(&self) -> PyResult<f64> {
         Ok(self.0.weight())
+    }
+
+    fn __repr__(&self) -> String {
+        format!("Edge({})", self.0.weight())
     }
 }
 
