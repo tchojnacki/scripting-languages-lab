@@ -41,6 +41,23 @@ impl Graph for AdjacencyList {
             .map(|(_, e)| e)
             .collect()
     }
+
+    fn neighbours(&self, node: &Node) -> Vec<&Node> {
+        self.nodes[self.index_lookup[node.label()]]
+            .1
+            .iter()
+            .map(|(to, _)| &self.nodes[*to].0)
+            .collect()
+    }
+
+    fn get_edge(&self, from: &Node, to: &Node) -> &Edge {
+        &self.nodes[self.index_lookup[from.label()]]
+            .1
+            .iter()
+            .find(|(idx, _)| self.nodes[*idx].0 == *to)
+            .unwrap()
+            .1
+    }
 }
 
 #[cfg(test)]
@@ -66,6 +83,6 @@ mod tests {
         a.add_node(Node::new("b".to_string()));
         a.add_edge("a", "b", Edge::default());
 
-        assert_eq!(a.edge_list().len(), 2);
+        assert_eq!(a.edge_list().len(), 1);
     }
 }

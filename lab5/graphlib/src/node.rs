@@ -1,4 +1,4 @@
-#[derive(Default, Clone)]
+#[derive(Default, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Node {
     label: String,
 }

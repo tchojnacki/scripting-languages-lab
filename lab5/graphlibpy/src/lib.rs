@@ -35,7 +35,7 @@ impl PyGraph {
         Ok(self
             .0
             .add_edge(from, to, edge)
-            .map(|e| PyEdge(e.clone()).into_py(py)))
+            .map(|e| PyEdge(*e).into_py(py)))
     }
 
     pub fn create_edge(
@@ -48,7 +48,7 @@ impl PyGraph {
         Ok(self
             .0
             .create_edge(from, to, weight)
-            .map(|e| PyEdge(e.clone()).into_py(py)))
+            .map(|e| PyEdge(*e).into_py(py)))
     }
 
     #[getter]
@@ -67,7 +67,7 @@ impl PyGraph {
             .0
             .edge_list()
             .iter()
-            .map(|&e| PyEdge(e.clone()).into_py(py))
+            .map(|&e| PyEdge(*e).into_py(py))
             .collect())
     }
 
