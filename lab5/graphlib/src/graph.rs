@@ -62,16 +62,14 @@ impl Graph {
             .collect()
     }
 
-    pub fn neighbours(&self, node: &str) -> Vec<Node> {
-        if self.labels.contains_left(node) {
+    pub fn neighbours(&self, node: &str) -> Option<Vec<Node>> {
+        Some(
             self.repr
-                .neighbours(*self.labels.get_by_left(node).unwrap())
+                .neighbours(*self.labels.get_by_left(node)?)
                 .iter()
                 .map(|idx| Node::from(self.labels.get_by_right(idx).unwrap()))
-                .collect()
-        } else {
-            Vec::new()
-        }
+                .collect(),
+        )
     }
 
     pub fn get_edge(&self, from: &str, to: &str) -> Option<Edge> {

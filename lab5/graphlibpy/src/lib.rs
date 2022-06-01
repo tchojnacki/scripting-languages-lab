@@ -38,13 +38,11 @@ impl PyGraph {
             .collect())
     }
 
-    fn neighbours(&self, node: &str) -> PyResult<Vec<PyNode>> {
+    fn neighbours(&self, node: &str) -> PyResult<Option<Vec<PyNode>>> {
         Ok(self
             .0
             .neighbours(node)
-            .iter()
-            .map(|n| PyNode(n.clone()))
-            .collect())
+            .map(|v| v.iter().map(|n| PyNode(n.clone())).collect()))
     }
 
     fn get_edge(&self, from: &str, to: &str) -> PyResult<Option<PyEdge>> {
