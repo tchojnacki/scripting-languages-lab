@@ -11,8 +11,13 @@ pub struct PyGraph(Graph);
 #[pymethods]
 impl PyGraph {
     #[new]
-    fn new() -> Self {
-        PyGraph(Graph::default())
+    #[args(representation = "None")]
+    fn new(representation: Option<&str>) -> Self {
+        PyGraph(if let Some(representation) = representation {
+            Graph::new(representation)
+        } else {
+            Graph::default()
+        })
     }
 
     fn add_node(&mut self, label: &str) -> PyResult<PyNode> {

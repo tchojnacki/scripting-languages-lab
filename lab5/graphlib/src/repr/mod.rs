@@ -1,6 +1,7 @@
 use std::collections::{HashSet, VecDeque};
 
 pub mod adjacency_list;
+pub mod edge_list;
 
 pub trait GraphRepr {
     fn add_node(&mut self) -> usize;

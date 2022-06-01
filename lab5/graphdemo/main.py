@@ -1,6 +1,6 @@
 from graphlibpy import Graph
 
-g = Graph()
+g = Graph("edge_list")
 n1 = g.add_node("test")
 n2 = g.add_node("test2")
 e = g.add_edge("test", "test2", 5)

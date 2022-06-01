@@ -1,5 +1,5 @@
 use crate::{
-    repr::{adjacency_list::AdjacencyList, GraphRepr},
+    repr::{adjacency_list::AdjacencyList, edge_list::EdgeList, GraphRepr},
     Edge, Node,
 };
 use bimap::BiMap;
@@ -21,6 +21,16 @@ impl Default for Graph {
 }
 
 impl Graph {
+    pub fn new(representation: &str) -> Self {
+        Self {
+            repr: match representation {
+                "edge_list" => Box::new(EdgeList::default()),
+                _ => Box::new(AdjacencyList::default()),
+            },
+            ..Default::default()
+        }
+    }
+
     pub fn add_node(&mut self, label: &str) -> Node {
         let idx = self.repr.add_node();
         self.labels.insert(label.to_string(), idx);
