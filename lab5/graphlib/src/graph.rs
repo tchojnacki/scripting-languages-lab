@@ -111,6 +111,16 @@ impl Graph {
         )
     }
 
+    pub fn dfs(&self, source: &str) -> Option<Vec<Node>> {
+        Some(
+            self.repr
+                .dfs(*self.labels.get_by_left(source)?)
+                .iter()
+                .map(|idx| Node::from(self.labels.get_by_right(idx).unwrap()))
+                .collect(),
+        )
+    }
+
     delegate! {
         to self.repr {
             pub fn order(&self) -> usize;

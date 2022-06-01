@@ -81,12 +81,35 @@ pub trait GraphRepr {
 
         while let Some(s) = queue.pop_front() {
             result.push(s);
-            self.neighbours(s).iter().for_each(|&v| {
-                if !visited[v] {
-                    queue.push_back(v);
-                    visited[v] = true;
+            for node in self.neighbours(s) {
+                if !visited[node] {
+                    queue.push_back(node);
+                    visited[node] = true;
                 }
-            });
+            }
+        }
+
+        result
+    }
+
+    fn dfs(&self, source: usize) -> Vec<usize> {
+        let mut visited = vec![false; self.order()];
+        let mut stack = VecDeque::new();
+        let mut result = Vec::new();
+
+        stack.push_front(source);
+
+        while let Some(s) = stack.pop_front() {
+            if !visited[s] {
+                result.push(s);
+                visited[s] = true;
+            }
+
+            for node in self.neighbours(s) {
+                if !visited[node] {
+                    stack.push_front(node);
+                }
+            }
         }
 
         result
