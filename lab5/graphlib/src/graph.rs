@@ -101,6 +101,16 @@ impl Graph {
         ))
     }
 
+    pub fn bfs(&self, source: &str) -> Option<Vec<Node>> {
+        Some(
+            self.repr
+                .bfs(*self.labels.get_by_left(source)?)
+                .iter()
+                .map(|idx| Node::from(self.labels.get_by_right(idx).unwrap()))
+                .collect(),
+        )
+    }
+
     delegate! {
         to self.repr {
             pub fn order(&self) -> usize;

@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 
 pub mod adjacency_list;
 
@@ -23,8 +23,8 @@ pub trait GraphRepr {
     }
 
     fn dijkstra(&self, source: usize) -> Vec<(f64, Vec<usize>)> {
-        let mut distances = Vec::from_iter(self.nodes().iter().map(|_| f64::INFINITY));
-        let mut previous = Vec::from_iter(self.nodes().iter().map(|_| None));
+        let mut distances = vec![f64::INFINITY; self.order()];
+        let mut previous = vec![None; self.order()];
         let mut queue = HashSet::<_>::from_iter(self.nodes().into_iter());
 
         distances[source] = 0.0;
@@ -49,16 +49,18 @@ pub trait GraphRepr {
         }
 
         let get_path = |to: usize| {
-            let mut u = Some(to);
-            if (u.is_some() && previous[u.unwrap()].is_some()) || u == Some(source) {
+            if source == to || previous[to].is_none() {
+                Vec::new()
+            } else {
                 let mut path = Vec::<usize>::new();
+
+                let mut u = Some(to);
                 while let Some(v) = u {
                     path.insert(0, v);
                     u = previous[v];
                 }
+
                 path
-            } else {
-                Vec::new()
             }
         };
 
@@ -67,5 +69,26 @@ pub trait GraphRepr {
             .enumerate()
             .map(|(to, dist)| (*dist, get_path(to)))
             .collect()
+    }
+
+    fn bfs(&self, source: usize) -> Vec<usize> {
+        let mut visited = vec![false; self.order()];
+        let mut queue = VecDeque::new();
+        let mut result = Vec::new();
+
+        queue.push_back(source);
+        visited[source] = true;
+
+        while let Some(s) = queue.pop_front() {
+            result.push(s);
+            self.neighbours(s).iter().for_each(|&v| {
+                if !visited[v] {
+                    queue.push_back(v);
+                    visited[v] = true;
+                }
+            });
+        }
+
+        result
     }
 }

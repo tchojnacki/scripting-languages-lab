@@ -62,6 +62,13 @@ impl PyGraph {
         }))
     }
 
+    fn bfs(&self, source: &str) -> PyResult<Option<Vec<PyNode>>> {
+        Ok(self
+            .0
+            .bfs(source)
+            .map(|v| v.iter().map(|n| PyNode(n.clone())).collect()))
+    }
+
     #[getter]
     fn order(&self) -> PyResult<usize> {
         Ok(self.0.order())
