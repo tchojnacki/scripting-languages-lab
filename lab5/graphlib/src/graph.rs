@@ -4,6 +4,7 @@ use crate::{
 };
 use bimap::BiMap;
 use delegate::delegate;
+use std::collections::HashMap;
 
 pub struct Graph {
     repr: Box<dyn GraphRepr + Send>,
@@ -80,6 +81,26 @@ impl Graph {
                 *self.labels.get_by_left(to)?,
             )
             .map(Edge::new)
+    }
+
+    pub fn dijkstra(&self, source: &str) -> Option<HashMap<String, (f64, Vec<Node>)>> {
+        Some(HashMap::from_iter(
+            self.repr
+                .dijkstra(*self.labels.get_by_left(source)?)
+                .iter()
+                .enumerate()
+                .map(|(to, (dist, path))| {
+                    (
+                        self.labels.get_by_right(&to).unwrap().to_owned(),
+                        (
+                            *dist,
+                            path.iter()
+                                .map(|idx| Node::from(self.labels.get_by_right(idx).unwrap()))
+                                .collect(),
+                        ),
+                    )
+                }),
+        ))
     }
 
     delegate! {

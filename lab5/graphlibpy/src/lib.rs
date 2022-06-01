@@ -1,5 +1,8 @@
+#![allow(clippy::type_complexity)]
+
 use graphlib::{Edge, Graph, Node};
 use pyo3::prelude::*;
+use std::collections::HashMap;
 
 /// A class representing a graph.
 #[pyclass(name = "Graph")]
@@ -46,6 +49,19 @@ impl PyGraph {
 
     fn get_edge(&self, from: &str, to: &str) -> PyResult<Option<PyEdge>> {
         Ok(self.0.get_edge(from, to).map(PyEdge))
+    }
+
+    fn dijkstra(&self, source: &str) -> PyResult<Option<HashMap<String, (f64, Vec<PyNode>)>>> {
+        Ok(self.0.dijkstra(source).map(|m| {
+            m.iter()
+                .map(|(s, (f, v))| {
+                    (
+                        s.to_owned(),
+                        (*f, v.iter().map(|n| PyNode(n.clone())).collect()),
+                    )
+                })
+                .collect()
+        }))
     }
 
     #[getter]
